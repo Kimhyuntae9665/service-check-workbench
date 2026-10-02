@@ -2,6 +2,10 @@
 
 **생산실적 조회가 안 될 때, 어디서 막혔는지 확인하고 복구 근거를 남기는 웹 앱입니다.**
 
+![React에서 Express와 MCP를 거쳐 HTTP 서비스와 PGlite를 점검하는 기술 연결 흐름. 위 점선은 선택 OpenAI API 연동.](docs/diagrams/technology-flow.png)
+
+*실선: 실제 로컬 점검·저장 경로 · 점선: 선택 OpenAI API 연동(외부 호출 미검증). [상세 구조와 판단 기준](#구조와-판단-기준)*
+
 IT 담당자가 “생산실적 화면에 연결할 수 없다”는 신고를 받은 상황을 다뤘습니다. 서버 실행, HTTP 접속, DB 조회, 실제 업무 기능을 차례로 확인합니다. 서버가 켜져 있어도 업무 조회가 실패하면 해결로 처리하지 않습니다.
 
 `React · TypeScript · Node.js · Express · PostgreSQL(PGlite) · MCP`
@@ -88,9 +92,7 @@ DB 연결 권한 오류는 **모의 애플리케이션 권한 게이트**입니�
 
 ## 구조와 판단 기준
 
-![React에서 Express와 MCP를 거쳐 HTTP 서비스와 PGlite를 점검하는 기술 연결 흐름. 위 점선은 선택 OpenAI API 연동.](docs/diagrams/technology-flow.png)
-
-**실선은 실제 로컬 점검·저장 경로, 위 점선은 선택 OpenAI API 경로입니다.** Node.js 카드는 점검 대상 HTTP 샘플 서비스, PGlite는 임베디드 PostgreSQL입니다. API와 MCP Client·Server도 같은 Node.js 프로세스에서 실행합니다. 모델이 도구를 선택하면 서버가 MCP로 실행하며, **실제 외부 모델 호출은 아직 미검증**입니다. OpenAI API 카드는 일반 API 아이콘을 사용했습니다.
+상단 흐름도의 Node.js 카드는 점검 대상 HTTP 샘플 서비스, PGlite는 임베디드 PostgreSQL입니다. API와 MCP Client·Server도 같은 Node.js 프로세스에서 실행합니다. 모델이 도구를 선택하면 서버가 MCP로 실행하며, **실제 외부 모델 호출은 아직 미검증**입니다. OpenAI API 카드는 일반 API 아이콘을 사용했습니다.
 
 React 화면이 Express API에 점검을 요청합니다. 서버는 MCP Client를 통해 점검 도구를 호출하고, 도구는 로컬 HTTP 서비스와 PGlite에서 근거를 수집합니다. 장애·실행 기록·가이드는 PGlite에 저장합니다. LLM 모드에서는 같은 도구를 모델이 추가 선택할 수 있으며, 실행 결과를 검증한 뒤 분석을 저장합니다.
 
