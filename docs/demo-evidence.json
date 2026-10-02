@@ -1,0 +1,256 @@
+{
+  "environment": "local HTTP + MCP SDK + PGlite sample service",
+  "source": "Actual browser walkthrough and read-only persisted API snapshot",
+  "incident": {
+    "id": "97aaa387-53a2-479b-a369-0b6af4dac342",
+    "title": "생산실적 화면에 연결할 수 없습니다",
+    "status": "verified",
+    "symptom": "A라인 생산실적 화면을 열면 연결 오류가 발생합니다. 서버는 실행 중이지만 업무 데이터를 볼 수 없습니다.",
+    "priority": "high",
+    "createdAt": "2026-10-02T01:48:54.082Z",
+    "lastRunId": "7135b4fa-1706-4f9f-9458-80c5e638aa05",
+    "serviceId": "production-api",
+    "updatedAt": "2026-10-02T01:49:05.315Z",
+    "serviceName": "생산실적 조회",
+    "runs": [
+      {
+        "id": "e6480289-7d14-4a06-9a88-3bdda9188649",
+        "kind": "diagnose",
+        "mode": "demo",
+        "steps": [
+          {
+            "id": "44f8836e-bb85-424b-8ad5-498045b1f2d0",
+            "raw": "{\"status\":\"pass\",\"summary\":\"로컬 HTTP 서비스가 실행 중입니다\",\"evidence\":[\"HTTP listener.listening = true\",\"실제 리스너: http://127.0.0.1:64060\",\"연결 설정: http://127.0.0.1:64059\"],\"details\":{\"running\":true,\"actualEndpoint\":\"http://127.0.0.1:64060\",\"connectorEndpoint\":\"http://127.0.0.1:64059\"}}",
+            "name": "서비스 실행 상태",
+            "tool": "inspect_service",
+            "status": "pass",
+            "summary": "로컬 HTTP 서비스가 실행 중입니다",
+            "evidence": [
+              "HTTP listener.listening = true",
+              "실제 리스너: http://127.0.0.1:64060",
+              "연결 설정: http://127.0.0.1:64059"
+            ],
+            "transport": "mcp",
+            "durationMs": 1,
+            "observedAt": "2026-10-02T01:48:54.144Z"
+          },
+          {
+            "id": "7b940ecc-1cb9-4944-bf7c-5ceef004a2f6",
+            "raw": "{\"status\":\"fail\",\"summary\":\"로컬 HTTP 대상에 연결할 수 없습니다\",\"evidence\":[\"GET http://127.0.0.1:64059/health\",\"TypeError: fetch failed\",\"ECONNREFUSED\"],\"details\":{\"error\":\"fetch failed\",\"cause\":\"ECONNREFUSED\"}}",
+            "name": "HTTP 연결 확인",
+            "tool": "probe_http",
+            "status": "fail",
+            "summary": "로컬 HTTP 대상에 연결할 수 없습니다",
+            "evidence": [
+              "GET http://127.0.0.1:64059/health",
+              "TypeError: fetch failed",
+              "ECONNREFUSED"
+            ],
+            "transport": "mcp",
+            "durationMs": 2,
+            "observedAt": "2026-10-02T01:48:54.145Z"
+          },
+          {
+            "id": "f100827e-5445-473f-943f-be25b2cd3721",
+            "raw": "{\"status\":\"pass\",\"summary\":\"PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다\",\"evidence\":[\"SELECT current_database(), $1::integer; parameter = 1\",\"result = [{\\\"database\\\":\\\"template1\\\",\\\"answer\\\":1}]\"],\"details\":[{\"database\":\"template1\",\"answer\":1}]}",
+            "name": "PostgreSQL 조회 확인",
+            "tool": "probe_database",
+            "status": "pass",
+            "summary": "PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다",
+            "evidence": [
+              "SELECT current_database(), $1::integer; parameter = 1",
+              "result = [{\"database\":\"template1\",\"answer\":1}]"
+            ],
+            "transport": "mcp",
+            "durationMs": 1,
+            "observedAt": "2026-10-02T01:48:54.148Z"
+          },
+          {
+            "id": "89187612-f571-4e3c-bd6c-9658c58a8c69",
+            "raw": "{\"status\":\"fail\",\"summary\":\"로컬 HTTP 대상에 연결할 수 없습니다\",\"evidence\":[\"GET http://127.0.0.1:64059/production\",\"TypeError: fetch failed\",\"ECONNREFUSED\"],\"details\":{\"error\":\"fetch failed\",\"cause\":\"ECONNREFUSED\"}}",
+            "name": "생산실적 기능 확인",
+            "tool": "read_production",
+            "status": "fail",
+            "summary": "로컬 HTTP 대상에 연결할 수 없습니다",
+            "evidence": [
+              "GET http://127.0.0.1:64059/production",
+              "TypeError: fetch failed",
+              "ECONNREFUSED"
+            ],
+            "transport": "mcp",
+            "durationMs": 2,
+            "observedAt": "2026-10-02T01:48:54.149Z"
+          },
+          {
+            "id": "d426b4ad-8fb1-4ccf-8e7d-2fc58c8f48c2",
+            "raw": "{\"status\":\"info\",\"summary\":\"검증 가이드 4건\",\"evidence\":[\"f948ea63-22ac-48a7-a6b9-873340818675: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"8f0e8c5f-c068-4b69-a46c-d3f14a9bcc56: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"91349102-3fac-44bb-b979-b5d8e8b4bea2: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"daf31130-4551-45f8-b9e2-8898281f682c: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\"],\"details\":[{\"id\":\"f948ea63-22ac-48a7-a6b9-873340818675\",\"cause\":\"실행 중인 서비스와 연결 설정의 포트 불일치\",\"title\":\"실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"checks\":[\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:46:29.814Z)\",\"HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:46:29.818Z)\",\"PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:46:29.826Z)\",\"생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:46:29.827Z)\"],\"symptom\":\"A라인 생산실적 화면을 열면 연결 오류가 발생합니다. 서버는 실행 중이지만 업무 데이터를 볼 수 없습니다.\",\"createdAt\":\"2026-10-02T01:46:38.913Z\",\"serviceId\":\"production-api\",\"conditions\":\"로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:46:29.813Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.\",\"resolution\":\"샘플 서비스의 연결 포트를 실행 중인 리스너와 일치하도록 수정했습니다. HTTP 접속·SQL 조회·생산실적 조회를 다시 실행해 복구를 확인했습니다.\",\"sourceRunId\":\"7b2577a9-4e63-4368-afa2-83762e547385\",\"verification\":\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:46:38.424Z)\\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:46:38.425Z)\\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:46:38.431Z)\\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:46:38.433Z)\",\"sourceIncidentId\":\"8e2c8496-aa9e-49dd-955a-c58f8da2e114\",\"verificationRunId\":\"29ef79d6-aa45-4a5a-bbd5-8bd0010c3c85\"},{\"id\":\"8f0e8c5f-c068-4b69-a46c-d3f14a9bcc56\",\"cause\":\"실행 중인 서비스와 연결 설정의 포트 불일치\",\"title\":\"실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"checks\":[\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:43:42.926Z)\",\"HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:43:42.928Z)\",\"PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:43:42.930Z)\",\"생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:43:42.931Z)\"],\"symptom\":\"A라인 생산실적 화면을 열면 연결 오류가 발생합니다. 서버는 실행 중이지만 업무 데이터를 볼 수 없습니다.\",\"createdAt\":\"2026-10-02T01:43:43.561Z\",\"serviceId\":\"production-api\",\"conditions\":\"로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:43:42.925Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.\",\"resolution\":\"샘플 서비스의 연결 포트를 실행 중인 리스너와 일치하도록 수정했습니다. HTTP 접속·SQL 조회·생산실적 조회를 다시 실행해 복구를 확인했습니다.\",\"sourceRunId\":\"75777a35-54b0-4cc7-9c0b-f30f3a3d7beb\",\"verification\":\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:43:43.237Z)\\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:43:43.237Z)\\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:43:43.241Z)\\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:43:43.242Z)\",\"sourceIncidentId\":\"afcab560-d29f-4285-99ee-07d0e0480c1b\",\"verificationRunId\":\"34902858-5fbc-4f64-b8dd-c227b30a9840\"},{\"id\":\"91349102-3fac-44bb-b979-b5d8e8b4bea2\",\"cause\":\"실행 중인 서비스와 연결 설정의 포트 불일치\",\"title\":\"실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"checks\":[\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:27:07.315Z)\",\"HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:27:07.315Z)\",\"PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:27:07.316Z)\",\"생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:27:07.317Z)\"],\"symptom\":\"서비스 중지 후 연결 포트 오류로 원인이 바뀐 상황에서 최근 실패와 복구 결과를 비교합니다.\",\"createdAt\":\"2026-10-02T01:28:09.026Z\",\"serviceId\":\"production-api\",\"conditions\":\"로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:27:07.314Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.\",\"resolution\":\"실제 리스너와 연결 설정을 대조해 잘못된 포트를 수정했습니다. 같은 서비스의 HTTP·SQL·생산실적 조회를 다시 확인했습니다.\",\"sourceRunId\":\"bccf1405-076e-496c-a1c5-8994a5561bc6\",\"verification\":\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:27:18.016Z)\\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:27:18.016Z)\\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:27:18.022Z)\\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:27:18.023Z)\",\"sourceIncidentId\":\"c4bfcbbe-3854-474d-8fdc-567728adfde3\",\"verificationRunId\":\"298ea27e-a53e-4729-a50f-366d3d422b8e\"},{\"id\":\"daf31130-4551-45f8-b9e2-8898281f682c\",\"cause\":\"실행 중인 서비스와 연결 설정의 포트 불일치\",\"title\":\"실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"checks\":[\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:11:41.684Z)\",\"HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:11:41.684Z)\",\"PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:11:41.687Z)\",\"생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:11:41.688Z)\"],\"symptom\":\"A라인 생산실적 조회 화면에서 연결 오류가 발생합니다. 서버 실행 여부와 연결 포트를 확인합니다.\",\"createdAt\":\"2026-10-02T01:12:54.006Z\",\"serviceId\":\"production-api\",\"conditions\":\"로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:11:41.683Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.\",\"resolution\":\"연결 설정의 포트를 실제 HTTP 리스너 포트로 복구했습니다. 같은 생산실적 조회를 다시 실행해 정상 응답을 확인했습니다.\",\"sourceRunId\":\"587b71d6-fef9-418d-a04f-946e59cfe86e\",\"verification\":\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:12:40.165Z)\\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:12:40.166Z)\\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:12:40.171Z)\\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:12:40.173Z)\",\"sourceIncidentId\":\"f9008117-520b-4099-9de6-a4456f3d2301\",\"verificationRunId\":\"fde95a50-edbf-48d4-8451-70e977d27a45\"}]}",
+            "name": "검증 가이드 검색",
+            "tool": "search_guides",
+            "status": "info",
+            "summary": "검증 가이드 4건",
+            "evidence": [
+              "f948ea63-22ac-48a7-a6b9-873340818675: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드",
+              "8f0e8c5f-c068-4b69-a46c-d3f14a9bcc56: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드",
+              "91349102-3fac-44bb-b979-b5d8e8b4bea2: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드",
+              "daf31130-4551-45f8-b9e2-8898281f682c: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드"
+            ],
+            "transport": "mcp",
+            "durationMs": 2,
+            "observedAt": "2026-10-02T01:48:54.152Z"
+          }
+        ],
+        "usage": {
+          "durationMs": 12,
+          "inputTokens": 0,
+          "outputTokens": 0
+        },
+        "status": "failed",
+        "llmError": null,
+        "diagnosis": {
+          "cause": "실행 중인 서비스와 연결 설정의 포트 불일치",
+          "title": "실행 중인 서비스와 연결 설정의 포트 불일치",
+          "summary": "2개 점검에서 실패를 확인했습니다. 실패 근거를 보존하고 환경을 복구한 뒤 재검증하세요.",
+          "confidence": "supported",
+          "nextAction": "실제 리스너와 연결 설정 주소를 대조하고 포트를 수정한 뒤 재검증하세요. 실습실의 정상 환경에서 연결 설정을 복구합니다.",
+          "evidenceIds": [
+            "7b940ecc-1cb9-4944-bf7c-5ceef004a2f6",
+            "89187612-f571-4e3c-bd6c-9658c58a8c69"
+          ]
+        },
+        "startedAt": "2026-10-02T01:48:54.143Z",
+        "incidentId": "97aaa387-53a2-479b-a369-0b6af4dac342",
+        "completedAt": "2026-10-02T01:48:54.155Z"
+      },
+      {
+        "id": "7135b4fa-1706-4f9f-9458-80c5e638aa05",
+        "kind": "recheck",
+        "mode": "demo",
+        "steps": [
+          {
+            "id": "13c1db95-8324-41d7-9207-f4accf33aa26",
+            "raw": "{\"status\":\"pass\",\"summary\":\"로컬 HTTP 서비스가 실행 중입니다\",\"evidence\":[\"HTTP listener.listening = true\",\"실제 리스너: http://127.0.0.1:64060\",\"연결 설정: http://127.0.0.1:64060\"],\"details\":{\"running\":true,\"actualEndpoint\":\"http://127.0.0.1:64060\",\"connectorEndpoint\":\"http://127.0.0.1:64060\"}}",
+            "name": "서비스 실행 상태",
+            "tool": "inspect_service",
+            "status": "pass",
+            "summary": "로컬 HTTP 서비스가 실행 중입니다",
+            "evidence": [
+              "HTTP listener.listening = true",
+              "실제 리스너: http://127.0.0.1:64060",
+              "연결 설정: http://127.0.0.1:64060"
+            ],
+            "transport": "mcp",
+            "durationMs": 0,
+            "observedAt": "2026-10-02T01:49:05.302Z"
+          },
+          {
+            "id": "0653baf7-f98f-46d0-add6-7827e2e51309",
+            "raw": "{\"status\":\"pass\",\"summary\":\"HTTP /health가 200으로 응답했습니다\",\"evidence\":[\"GET http://127.0.0.1:64060/health\",\"HTTP 200\",\"{\\\"status\\\":\\\"ok\\\",\\\"service\\\":\\\"production-api\\\"}\"],\"details\":{\"url\":\"http://127.0.0.1:64060/health\",\"status\":200,\"body\":{\"status\":\"ok\",\"service\":\"production-api\"}}}",
+            "name": "HTTP 연결 확인",
+            "tool": "probe_http",
+            "status": "pass",
+            "summary": "HTTP /health가 200으로 응답했습니다",
+            "evidence": [
+              "GET http://127.0.0.1:64060/health",
+              "HTTP 200",
+              "{\"status\":\"ok\",\"service\":\"production-api\"}"
+            ],
+            "transport": "mcp",
+            "durationMs": 6,
+            "observedAt": "2026-10-02T01:49:05.302Z"
+          },
+          {
+            "id": "bce76e4d-3a16-4b29-a69a-d78387e77087",
+            "raw": "{\"status\":\"pass\",\"summary\":\"PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다\",\"evidence\":[\"SELECT current_database(), $1::integer; parameter = 1\",\"result = [{\\\"database\\\":\\\"template1\\\",\\\"answer\\\":1}]\"],\"details\":[{\"database\":\"template1\",\"answer\":1}]}",
+            "name": "PostgreSQL 조회 확인",
+            "tool": "probe_database",
+            "status": "pass",
+            "summary": "PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다",
+            "evidence": [
+              "SELECT current_database(), $1::integer; parameter = 1",
+              "result = [{\"database\":\"template1\",\"answer\":1}]"
+            ],
+            "transport": "mcp",
+            "durationMs": 1,
+            "observedAt": "2026-10-02T01:49:05.308Z"
+          },
+          {
+            "id": "95ac67e1-7821-4b05-b67f-9997074994dc",
+            "raw": "{\"status\":\"pass\",\"summary\":\"PostgreSQL 기반 생산실적 2건을 조회했습니다\",\"evidence\":[\"GET http://127.0.0.1:64060/production\",\"HTTP 200\",\"{\\\"records\\\":[{\\\"id\\\":\\\"sample-01\\\",\\\"line\\\":\\\"A라인\\\",\\\"product\\\":\\\"산업용 포장재\\\",\\\"quantity\\\":1240,\\\"shift\\\":\\\"day\\\"},{\\\"id\\\":\\\"sample-02\\\",\\\"line\\\":\\\"B라인\\\",\\\"product\\\":\\\"전자 부품\\\",\\\"quantity\\\":860,\\\"shift\\\":\\\"day\\\"}],\\\"source\\\":\\\"PGlite PostgreSQL · 데모 생산실적 데이터\\\"}\"],\"details\":{\"url\":\"http://127.0.0.1:64060/production\",\"status\":200,\"body\":{\"records\":[{\"id\":\"sample-01\",\"line\":\"A라인\",\"product\":\"산업용 포장재\",\"quantity\":1240,\"shift\":\"day\"},{\"id\":\"sample-02\",\"line\":\"B라인\",\"product\":\"전자 부품\",\"quantity\":860,\"shift\":\"day\"}],\"source\":\"PGlite PostgreSQL · 데모 생산실적 데이터\"}}}",
+            "name": "생산실적 기능 확인",
+            "tool": "read_production",
+            "status": "pass",
+            "summary": "PostgreSQL 기반 생산실적 2건을 조회했습니다",
+            "evidence": [
+              "GET http://127.0.0.1:64060/production",
+              "HTTP 200",
+              "{\"records\":[{\"id\":\"sample-01\",\"line\":\"A라인\",\"product\":\"산업용 포장재\",\"quantity\":1240,\"shift\":\"day\"},{\"id\":\"sample-02\",\"line\":\"B라인\",\"product\":\"전자 부품\",\"quantity\":860,\"shift\":\"day\"}],\"source\":\"PGlite PostgreSQL · 데모 생산실적 데이터\"}"
+            ],
+            "transport": "mcp",
+            "durationMs": 3,
+            "observedAt": "2026-10-02T01:49:05.309Z"
+          },
+          {
+            "id": "2786d175-b80c-421a-9880-696355a807f1",
+            "raw": "{\"status\":\"info\",\"summary\":\"검증 가이드 2건\",\"evidence\":[\"f948ea63-22ac-48a7-a6b9-873340818675: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"8f0e8c5f-c068-4b69-a46c-d3f14a9bcc56: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\"],\"details\":[{\"id\":\"f948ea63-22ac-48a7-a6b9-873340818675\",\"cause\":\"실행 중인 서비스와 연결 설정의 포트 불일치\",\"title\":\"실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"checks\":[\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:46:29.814Z)\",\"HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:46:29.818Z)\",\"PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:46:29.826Z)\",\"생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:46:29.827Z)\"],\"symptom\":\"A라인 생산실적 화면을 열면 연결 오류가 발생합니다. 서버는 실행 중이지만 업무 데이터를 볼 수 없습니다.\",\"createdAt\":\"2026-10-02T01:46:38.913Z\",\"serviceId\":\"production-api\",\"conditions\":\"로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:46:29.813Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.\",\"resolution\":\"샘플 서비스의 연결 포트를 실행 중인 리스너와 일치하도록 수정했습니다. HTTP 접속·SQL 조회·생산실적 조회를 다시 실행해 복구를 확인했습니다.\",\"sourceRunId\":\"7b2577a9-4e63-4368-afa2-83762e547385\",\"verification\":\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:46:38.424Z)\\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:46:38.425Z)\\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:46:38.431Z)\\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:46:38.433Z)\",\"sourceIncidentId\":\"8e2c8496-aa9e-49dd-955a-c58f8da2e114\",\"verificationRunId\":\"29ef79d6-aa45-4a5a-bbd5-8bd0010c3c85\"},{\"id\":\"8f0e8c5f-c068-4b69-a46c-d3f14a9bcc56\",\"cause\":\"실행 중인 서비스와 연결 설정의 포트 불일치\",\"title\":\"실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드\",\"checks\":[\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:43:42.926Z)\",\"HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:43:42.928Z)\",\"PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:43:42.930Z)\",\"생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:43:42.931Z)\"],\"symptom\":\"A라인 생산실적 화면을 열면 연결 오류가 발생합니다. 서버는 실행 중이지만 업무 데이터를 볼 수 없습니다.\",\"createdAt\":\"2026-10-02T01:43:43.561Z\",\"serviceId\":\"production-api\",\"conditions\":\"로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:43:42.925Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.\",\"resolution\":\"샘플 서비스의 연결 포트를 실행 중인 리스너와 일치하도록 수정했습니다. HTTP 접속·SQL 조회·생산실적 조회를 다시 실행해 복구를 확인했습니다.\",\"sourceRunId\":\"75777a35-54b0-4cc7-9c0b-f30f3a3d7beb\",\"verification\":\"서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:43:43.237Z)\\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:43:43.237Z)\\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:43:43.241Z)\\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:43:43.242Z)\",\"sourceIncidentId\":\"afcab560-d29f-4285-99ee-07d0e0480c1b\",\"verificationRunId\":\"34902858-5fbc-4f64-b8dd-c227b30a9840\"}]}",
+            "name": "검증 가이드 검색",
+            "tool": "search_guides",
+            "status": "info",
+            "summary": "검증 가이드 2건",
+            "evidence": [
+              "f948ea63-22ac-48a7-a6b9-873340818675: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드",
+              "8f0e8c5f-c068-4b69-a46c-d3f14a9bcc56: 실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드"
+            ],
+            "transport": "mcp",
+            "durationMs": 1,
+            "observedAt": "2026-10-02T01:49:05.313Z"
+          }
+        ],
+        "usage": {
+          "durationMs": 14,
+          "inputTokens": 0,
+          "outputTokens": 0
+        },
+        "status": "passed",
+        "llmError": null,
+        "diagnosis": {
+          "cause": "실행 중인 서비스와 연결 설정의 포트 불일치",
+          "title": "같은 서비스의 필수 점검이 모두 통과했습니다",
+          "summary": "최근 실패 점검 뒤 서비스, HTTP, SQL, 생산실적 조회를 다시 실행해 복구를 확인했습니다.",
+          "confidence": "supported",
+          "nextAction": "복구 절차를 기록해 재검증 가이드를 생성할 수 있습니다.",
+          "evidenceIds": [
+            "13c1db95-8324-41d7-9207-f4accf33aa26",
+            "0653baf7-f98f-46d0-add6-7827e2e51309",
+            "bce76e4d-3a16-4b29-a69a-d78387e77087",
+            "95ac67e1-7821-4b05-b67f-9997074994dc"
+          ]
+        },
+        "startedAt": "2026-10-02T01:49:05.301Z",
+        "incidentId": "97aaa387-53a2-479b-a369-0b6af4dac342",
+        "completedAt": "2026-10-02T01:49:05.315Z"
+      }
+    ],
+    "guide": {
+      "id": "bbb7ddf9-b5ea-44bc-a29b-750815cb0d37",
+      "cause": "실행 중인 서비스와 연결 설정의 포트 불일치",
+      "title": "실행 중인 서비스와 연결 설정의 포트 불일치 · 재검증 가이드",
+      "checks": [
+        "서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:48:54.144Z)",
+        "HTTP 연결 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:48:54.145Z)",
+        "PostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:48:54.148Z)",
+        "생산실적 기능 확인: 로컬 HTTP 대상에 연결할 수 없습니다 (2026-10-02T01:48:54.149Z)"
+      ],
+      "symptom": "A라인 생산실적 화면을 열면 연결 오류가 발생합니다. 서버는 실행 중이지만 업무 데이터를 볼 수 없습니다.",
+      "createdAt": "2026-10-02T01:49:05.652Z",
+      "serviceId": "production-api",
+      "conditions": "로컬 장애 실습실 · 샘플 생산실적 데이터 / 재현 당시 실제 리스너: http://127.0.0.1:64060 / 연결 설정: http://127.0.0.1:64059 / 관측: 2026-10-02T01:48:54.143Z. 최근 실패 점검과 현재 재검증을 연결한 기록입니다.",
+      "resolution": "샘플 서비스의 연결 포트를 실행 중인 리스너와 일치하도록 수정했습니다. HTTP 접속·SQL 조회·생산실적 조회를 다시 실행해 복구를 확인했습니다.",
+      "sourceRunId": "e6480289-7d14-4a06-9a88-3bdda9188649",
+      "verification": "서비스 실행 상태: 로컬 HTTP 서비스가 실행 중입니다 (2026-10-02T01:49:05.302Z)\nHTTP 연결 확인: HTTP /health가 200으로 응답했습니다 (2026-10-02T01:49:05.302Z)\nPostgreSQL 조회 확인: PGlite PostgreSQL에서 실제 SQL 조회가 성공했습니다 (2026-10-02T01:49:05.308Z)\n생산실적 기능 확인: PostgreSQL 기반 생산실적 2건을 조회했습니다 (2026-10-02T01:49:05.309Z)",
+      "sourceIncidentId": "97aaa387-53a2-479b-a369-0b6af4dac342",
+      "verificationRunId": "7135b4fa-1706-4f9f-9458-80c5e638aa05"
+    }
+  },
+  "note": "Rules mode; not an external LLM execution record or customer production system",
+  "measuredAt": "2026-10-02T01:49:31.0372526Z"
+}

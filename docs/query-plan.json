@@ -1,0 +1,204 @@
+{
+  "measuredAt": "2026-10-02T01:08:11.651Z",
+  "environment": "PGlite in-memory PostgreSQL; enable_seqscan=on for both plans",
+  "dataset": "Synthetic: 100 incidents, 10000 runs; selected incident has 100 runs",
+  "note": "Single local query execution, not production throughput or a repeated performance estimate.",
+  "query": "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT data,fixture_revision,actual_failure FROM runs WHERE incident_id=$1 ORDER BY data->>'startedAt' ASC",
+  "parameters": [
+    "plan-incident-42"
+  ],
+  "before": [
+    {
+      "QUERY PLAN": [
+        {
+          "Plan": {
+            "Node Type": "Sort",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 282.57,
+            "Total Cost": 282.82,
+            "Plan Rows": 100,
+            "Plan Width": 95,
+            "Actual Startup Time": 3.675,
+            "Actual Total Time": 3.746,
+            "Actual Rows": 100,
+            "Actual Loops": 1,
+            "Sort Key": [
+              "((data ->> 'startedAt'::text))"
+            ],
+            "Sort Method": "quicksort",
+            "Sort Space Used": 27,
+            "Sort Space Type": "Memory",
+            "Shared Hit Blocks": 154,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "runs",
+                "Alias": "runs",
+                "Startup Cost": 0,
+                "Total Cost": 279.25,
+                "Plan Rows": 100,
+                "Plan Width": 95,
+                "Actual Startup Time": 0.069,
+                "Actual Total Time": 2.74,
+                "Actual Rows": 100,
+                "Actual Loops": 1,
+                "Filter": "(incident_id = 'plan-incident-42'::text)",
+                "Rows Removed by Filter": 9900,
+                "Shared Hit Blocks": 154,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 25,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.458,
+          "Triggers": [],
+          "Execution Time": 4.002
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "QUERY PLAN": [
+        {
+          "Plan": {
+            "Node Type": "Sort",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 153.71,
+            "Total Cost": 153.96,
+            "Plan Rows": 100,
+            "Plan Width": 95,
+            "Actual Startup Time": 0.423,
+            "Actual Total Time": 0.466,
+            "Actual Rows": 100,
+            "Actual Loops": 1,
+            "Sort Key": [
+              "((data ->> 'startedAt'::text))"
+            ],
+            "Sort Method": "quicksort",
+            "Sort Space Used": 27,
+            "Sort Space Type": "Memory",
+            "Shared Hit Blocks": 100,
+            "Shared Read Blocks": 3,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Bitmap Heap Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "runs",
+                "Alias": "runs",
+                "Startup Cost": 5.06,
+                "Total Cost": 150.39,
+                "Plan Rows": 100,
+                "Plan Width": 95,
+                "Actual Startup Time": 0.082,
+                "Actual Total Time": 0.307,
+                "Actual Rows": 100,
+                "Actual Loops": 1,
+                "Recheck Cond": "(incident_id = 'plan-incident-42'::text)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 100,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 100,
+                "Shared Read Blocks": 3,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "runs_incident_started_idx",
+                    "Startup Cost": 0,
+                    "Total Cost": 5.04,
+                    "Plan Rows": 100,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.045,
+                    "Actual Total Time": 0.046,
+                    "Actual Rows": 100,
+                    "Actual Loops": 1,
+                    "Index Cond": "(incident_id = 'plan-incident-42'::text)",
+                    "Shared Hit Blocks": 0,
+                    "Shared Read Blocks": 3,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 16,
+            "Shared Read Blocks": 1,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.25,
+          "Triggers": [],
+          "Execution Time": 0.551
+        }
+      ]
+    }
+  ]
+}

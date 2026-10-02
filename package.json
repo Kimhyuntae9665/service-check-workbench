@@ -1,0 +1,42 @@
+{
+  "name": "jeomgeomsil",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "장애 접수부터 근거 확인, 재검증, 가이드까지 이어지는 서비스 점검 웹앱",
+  "scripts": {
+    "dev": "tsx server/index.ts",
+    "build": "vite build",
+    "start": "tsx server/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "check": "npm run typecheck && npm test && npm run build",
+    "benchmark": "tsx scripts/benchmark.ts",
+    "query-plan": "tsx scripts/query-plan.ts",
+    "evidence:llm": "tsx scripts/llm-evidence.ts",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"server/**/*.ts\" \"shared/**/*.ts\" \"scripts/**/*.ts\" \"tests/**/*.ts\""
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "express": "^5.1.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "measuredAt": "2026-10-02T01:09:15.362Z",
+  "mode": "demo",
+  "environment": "local HTTP + MCP SDK + in-memory PGlite; illustrative sample records",
+  "note": "실측 소요시간입니다. 토큰 절감률이나 실제 운영 성능을 나타내지 않습니다.",
+  "results": [
+    {
+      "scenario": "service_down",
+      "diagnosis": "failed",
+      "recheck": "passed",
+      "diagnosisMs": 15,
+      "recheckMs": 15,
+      "mcpCalls": 10,
+      "guide": "61667d55-a74d-40c0-a870-b57ba11e2eee"
+    },
+    {
+      "scenario": "wrong_port",
+      "diagnosis": "failed",
+      "recheck": "passed",
+      "diagnosisMs": 5,
+      "recheckMs": 24,
+      "mcpCalls": 10,
+      "guide": "0f689648-df61-4fd3-8d95-291a6fb2ae35"
+    },
+    {
+      "scenario": "db_auth",
+      "diagnosis": "failed",
+      "recheck": "passed",
+      "diagnosisMs": 23,
+      "recheckMs": 28,
+      "mcpCalls": 10,
+      "guide": "176fffc5-6fe4-4f83-9752-ef7ced950206"
+    }
+  ]
+}
