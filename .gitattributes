@@ -1,0 +1,2 @@
+# Keep pinned SVG asset bytes stable on Windows for the provenance hashes.
+docs/diagrams/assets/*.svg text eol=lf

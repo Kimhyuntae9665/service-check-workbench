@@ -1,0 +1,27 @@
+{
+  "title": "서비스 점검의 기술 연결 흐름",
+  "status": "implemented",
+  "basis": "Source commit 879519f27f5a083578f5247d53e84a66c8bcc114: src/App.tsx, server/app.ts, server/incidents.ts, server/diagnostics.ts, server/lab.ts, server/llm.ts, server/storage.ts. OpenAI adapter implemented; real provider execution unverified.",
+  "description": "React requests Express. Express invokes the MCP Client and Server in the same Node.js process. MCP tools query the Node.js HTTP sample service and PGlite directly. The HTTP sample reads production records from PGlite. Express also persists incident, run and guide records in PGlite. Dashed edges represent the optional OpenAI API analysis and server-mediated execution of model-selected MCP tools; no direct model-to-MCP connection or verified external model call is implied.",
+  "width": 1180,
+  "height": 500,
+  "asset_manifest": "assets.json",
+  "nodes": [
+    { "id": "react", "asset": "react", "x": 70, "y": 225 },
+    { "id": "express", "asset": "express", "x": 300, "y": 225 },
+    { "id": "mcp", "asset": "mcp", "x": 530, "y": 225 },
+    { "id": "node", "asset": "node", "x": 760, "y": 225 },
+    { "id": "pglite", "asset": "pglite", "x": 990, "y": 225 },
+    { "id": "openai", "asset": "openai", "x": 415, "y": 45 }
+  ],
+  "edges": [
+    { "source": "react", "target": "express", "path": "M170 275 C220 275 250 275 298 275", "meaning": "REST API request" },
+    { "source": "express", "target": "mcp", "path": "M400 275 C450 275 480 275 528 275", "meaning": "Required MCP diagnostic tools" },
+    { "source": "mcp", "target": "node", "path": "M630 275 C680 275 710 275 758 275", "meaning": "HTTP /health and /production checks" },
+    { "source": "node", "target": "pglite", "path": "M860 275 C910 275 940 275 988 275", "meaning": "HTTP sample service reads production SQL" },
+    { "source": "mcp", "target": "pglite", "path": "M630 310 C675 310 655 400 705 400 L925 400 C965 400 945 310 988 310", "meaning": "Direct probe SQL and stored guide search" },
+    { "source": "express", "target": "pglite", "path": "M400 312 C448 312 430 452 478 452 L1090 452 Q1135 452 1135 410 L1135 319 Q1135 275 1092 275", "meaning": "Persist incidents, runs and guides" },
+    { "source": "express", "target": "openai", "path": "M350 225 C350 164 383 95 413 95", "optional": true, "meaning": "Optional OpenAI analysis request" },
+    { "source": "openai", "target": "mcp", "path": "M515 95 C578 95 580 165 580 223", "optional": true, "meaning": "Server executes model-selected tools through MCP; OpenAI does not connect to MCP directly" }
+  ]
+}

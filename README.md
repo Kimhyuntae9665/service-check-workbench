@@ -88,9 +88,20 @@ DB 연결 권한 오류는 **모의 애플리케이션 권한 게이트**입니�
 
 ## 구조와 판단 기준
 
-![실제 구현 구조](docs/architecture.svg)
+![React에서 Express와 MCP를 거쳐 HTTP 서비스와 PGlite를 점검하는 기술 연결 흐름. 위 점선은 선택 OpenAI API 연동.](docs/diagrams/technology-flow.png)
+
+**실선은 실제 로컬 점검·저장 경로, 위 점선은 선택 OpenAI API 경로입니다.** Node.js 카드는 점검 대상 HTTP 샘플 서비스, PGlite는 임베디드 PostgreSQL입니다. API와 MCP Client·Server도 같은 Node.js 프로세스에서 실행합니다. 모델이 도구를 선택하면 서버가 MCP로 실행하며, **실제 외부 모델 호출은 아직 미검증**입니다. OpenAI API 카드는 일반 API 아이콘을 사용했습니다.
 
 React 화면이 Express API에 점검을 요청합니다. 서버는 MCP Client를 통해 점검 도구를 호출하고, 도구는 로컬 HTTP 서비스와 PGlite에서 근거를 수집합니다. 장애·실행 기록·가이드는 PGlite에 저장합니다. LLM 모드에서는 같은 도구를 모델이 추가 선택할 수 있으며, 실행 결과를 검증한 뒤 분석을 저장합니다.
+
+<details>
+<summary>상세 구조도 · 점검 대상과 저장 경로 보기</summary>
+
+![실제 구현의 상세 구조](docs/architecture.svg)
+
+</details>
+
+로고 출처·사용 범위와 화살표 설명은 [흐름도 근거](docs/diagrams/logo-sources.md)에 정리했습니다. [편집 가능한 SVG](docs/diagrams/technology-flow.svg)도 함께 제공합니다.
 
 **해결 완료 판단은 서버가 맡습니다.** 최근 실패 근거가 있고, 현재 환경의 네 필수 점검이 모두 통과한 재검증이어야 합니다. 환경을 바꾸거나 서버를 다시 시작하면 현재 정상 확인은 만료됩니다. 이전 기록과 가이드는 과거 근거로 남습니다. 중간에 다른 원인이 확인되면 가장 최근 실패를 복구·가이드의 기준으로 사용합니다.
 

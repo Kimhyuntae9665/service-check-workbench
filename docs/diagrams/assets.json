@@ -1,0 +1,54 @@
+{
+  "react": {
+    "name": "React",
+    "path": "assets/react.svg",
+    "sha256": "e5278257e728c9527af74185f73f0715ffde03d713512aded478d832665e8f24",
+    "source": "https://raw.githubusercontent.com/reactjs/react.dev/8c68ae8d2410abe59f351195780c6f8ea9f50904/public/images/brand/logo_dark.svg",
+    "revision": "8c68ae8d2410abe59f351195780c6f8ea9f50904",
+    "website": "https://react.dev",
+    "license_note": "Official project asset used to identify the inspected dependency. Artwork and trademarks belong to their owners; the app MIT license does not relicense third-party marks. See logo-sources.md."
+  },
+  "express": {
+    "name": "Express",
+    "path": "assets/express.svg",
+    "sha256": "7537b9a8e700f20f470cebd879e1df5565cfe43a97e809e51e687b561e2f1546",
+    "source": "https://raw.githubusercontent.com/expressjs/expressjs.com/c936b6310349ca92cf59493d4038dd663704f1a1/public/images/logos/logo-express-black.svg",
+    "revision": "c936b6310349ca92cf59493d4038dd663704f1a1",
+    "website": "https://expressjs.com",
+    "license_note": "Official project asset used to identify the inspected dependency. Artwork and trademarks belong to their owners; the app MIT license does not relicense third-party marks. See logo-sources.md."
+  },
+  "mcp": {
+    "name": "MCP",
+    "path": "assets/mcp.svg",
+    "sha256": "f6f33e24e95846f9ae2582ab72c4eae7beec5ec52c13d767d9f342bf639dd3e6",
+    "source": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/3098fe94caa1b9e0afaaa6d30e040b61d5802471/docs/favicon.svg",
+    "revision": "3098fe94caa1b9e0afaaa6d30e040b61d5802471",
+    "website": "https://modelcontextprotocol.io",
+    "license_note": "Official project asset used to identify the inspected dependency. Artwork and trademarks belong to their owners; the app MIT license does not relicense third-party marks. See logo-sources.md."
+  },
+  "pglite": {
+    "name": "PGlite",
+    "path": "assets/pglite.svg",
+    "sha256": "2ca41fb968c94b78fe870ee08d83b64d65af7648c6d9e332a63ce3454ae5595e",
+    "source": "https://raw.githubusercontent.com/electric-sql/pglite/ae182ff8bd5ba4acb887d6c925d607a1498aa0b5/docs/public/img/brand/icon.svg",
+    "revision": "ae182ff8bd5ba4acb887d6c925d607a1498aa0b5",
+    "website": "https://pglite.dev",
+    "license_note": "Official project asset used to identify the inspected dependency. Artwork and trademarks belong to their owners; the app MIT license does not relicense third-party marks. See logo-sources.md."
+  },
+  "node": {
+    "name": "Node.js",
+    "path": "assets/node.svg",
+    "sha256": "e4c8de546b2462ad9497679c55609701144ffacd8e18ac17a7f7f7b795de9fe7",
+    "source": "https://nodejs.org/static/logos/nodejsHex.svg",
+    "website": "https://nodejs.org/en/about/branding",
+    "license_note": "Official Node.js hex mark. Node.js is a registered trademark of OpenJS Foundation. Unmodified proportions/colors; dependency identification, no endorsement. See OpenJS trademark policy and logo-sources.md."
+  },
+  "openai": {
+    "name": "OpenAI API",
+    "path": "assets/openai-api.svg",
+    "sha256": "bc4a4107c0f594555a131b64f510d88e5621320d04658aa5703e26dd708ce47b",
+    "source": "Original neutral API pictogram authored for this diagram; not an OpenAI logo.",
+    "website": "https://developers.openai.com/api/reference/overview",
+    "license_note": "Original pictogram: MIT. OpenAI is a name owned by OpenAI; used only to identify the optional API adapter, with no sponsorship or executed-provider claim."
+  }
+}
